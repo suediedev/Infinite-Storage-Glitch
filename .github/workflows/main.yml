@@ -32,7 +32,7 @@ jobs:
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
       - name: Cache Rust dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
@@ -46,7 +46,7 @@ jobs:
           cargo build --release
 
       - name: Upload binary as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: isg_4real
           path: target/release/isg_4real

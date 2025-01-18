@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up non-interactive mode for apt-get
+        run: |
+          echo "DEBIAN_FRONTEND=noninteractive" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git curl libopencv-dev ffmpeg build-essential libssl-dev clang libclang-dev
+
+      - name: Install Rust
+        run: |
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Set working directory
+        run: |
+          mkdir -p /home/Infinite-Storage-Glitch
+          cd /home/Infinite-Storage-Glitch
+          echo "CARGO_HOME=/home/Infinite-Storage-Glitch/cargo_home" >> $GITHUB_ENV
+
+      - name: Build the project
+        run: |
+          cd /home/Infinite-Storage-Glitch
+          cargo build --release
+
+      - name: Run the compiled binary
+        run: |
+          cd /home/Infinite-Storage-Glitch/target/release
+          ./isg_4real

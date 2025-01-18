@@ -33,10 +33,9 @@ jobs:
 
       - name: Build the project
         run: |
-          cd /home/Infinite-Storage-Glitch
           cargo build --release
 
       - name: Run the compiled binary
         run: |
-          cd /home/Infinite-Storage-Glitch/target/release
+          cd target/release
           ./isg_4real

@@ -31,11 +31,22 @@ jobs:
           curl https://sh.rustup.rs -sSf | sh -s -- -y
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
+      - name: Cache Rust dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       - name: Build the project
         run: |
           cargo build --release
 
-      - name: Run the compiled binary
-        run: |
-          cd target/release
-          ./isg_4real
+      - name: Upload binary as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: isg_4real
+          path: target/release/isg_4real
